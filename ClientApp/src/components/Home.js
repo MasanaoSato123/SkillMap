@@ -30,8 +30,51 @@ const employeeData = [
         age: 28,
         department: '技術',
         skills: { java: 5, 'C#': 5, PHP: 1, クラウド: 0, DB: 0 }
-    }
+    },
+    {
+        id: 5,
+        name: '山本健太',
+        age: 27,
+        department: '技術',
+        skills: { java: 4, 'C#': 3, PHP: 2, クラウド: 3, DB: 1 }
+    },
+    {
+        id: 6,
+        name: '伊藤文子',
+        age: 33,
+        department: '営業',
+        skills: { java: 2, 'C#': 1, PHP: 5, クラウド: 1, DB: 3 }
+    },
+    {
+        id: 7,
+        name: '高橋太一',
+        age: 31,
+        department: '総務',
+        skills: { java: 3, 'C#': 4, PHP: 3, クラウド: 2, DB: 4 }
+    },
+    {
+        id: 8,
+        name: '岡田美香',
+        age: 26,
+        department: '技術',
+        skills: { java: 4, 'C#': 2, PHP: 4, クラウド: 3, DB: 1 }
+    },
+    {
+        id: 9,
+        name: '渡辺拓郎',
+        age: 29,
+        department: '営業',
+        skills: { java: 1, 'C#': 2, PHP: 3, クラウド: 5, DB: 3 }
+    },
+    {
+        id: 10,
+        name: '中村恵子',
+        age: 23,
+        department: '総務',
+        skills: { java: 5, 'C#': 1, PHP: 2, クラウド: 1, DB: 2 }
+    },
 ];
+
 
 Modal.setAppElement('#root');
 
@@ -97,31 +140,49 @@ const Home = () => {
         setModalIsOpen(false);
     };
 
+    const employeesByDepartment = employeeData.reduce((acc, employee) => {
+        if (!acc[employee.department]) {
+            acc[employee.department] = [employee];
+        } else {
+            acc[employee.department].push(employee);
+        }
+        return acc;
+    }, {});
+
+
     return (
         <div>
             <h2>社員一覧</h2>
-            <ul>
-                {employeeData.map((employee) => (
-                    <li key={employee.id} onClick={() => handleSelectEmployee(employee)}>
-                        {employee.name}
-                    </li>
+            <div style={{ display: 'flex' }}>
+                {Object.keys(employeesByDepartment).map((department) => (
+                    <div key={department} style={{ padding: '0 10px' }}>
+                        <h2>{department}</h2>
+                        <ul>
+                            {employeesByDepartment[department].map((employee) => (
+                                <li key={employee.id} onClick={() => handleSelectEmployee(employee)}>
+                                    {employee.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 ))}
-            </ul>
-            {selectedEmployee && (
-                <Modal isOpen={modalIsOpen} onRequestClose={handleClosePopup}>
-                    <div className="popup">
-                        <div className="popup-content">
-                            <h3>{selectedEmployee.name}</h3>
-                            <p>年齢：{selectedEmployee.age}</p>
-                            <p>部署：{selectedEmployee.department}</p>
-                            <button onClick={handleClosePopup}>閉じる</button>
-                            <div>
-                                <ApexCharts options={chartOptions} series={chartSeries} type="radar" height={350} />
+                {selectedEmployee && (
+                    <Modal isOpen={modalIsOpen} onRequestClose={handleClosePopup}>
+                        <div className="popup">
+                            <div className="popup-content">
+                                <h3>{selectedEmployee.name}</h3>
+                                <p>年齢：{selectedEmployee.age}</p>
+                                <p>部署：{selectedEmployee.department}</p>
+                                <button onClick={handleClosePopup}>閉じる</button>
+                                <div>
+                                    <ApexCharts options={chartOptions} series={chartSeries} type="radar" height={350} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Modal>
-            )}
+                    </Modal>
+                )}
+            </div>
+
         </div>
     );
 };
