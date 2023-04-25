@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
-//import Modal from 'react-modal';
 import './styles.css';
 
 const employeeData = [
@@ -75,9 +74,6 @@ const employeeData = [
         skills: { java: 5, 'C#': 1, PHP: 2, クラウド: 1, DB: 2 }
     },
 ];
-
-
-//Modal.setAppElement('#root');
 
 const Home = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
