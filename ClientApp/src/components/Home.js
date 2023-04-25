@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
-import Modal from 'react-modal';
+//import Modal from 'react-modal';
 import './styles.css';
 
 const employeeData = [
@@ -77,7 +77,7 @@ const employeeData = [
 ];
 
 
-Modal.setAppElement('#root');
+//Modal.setAppElement('#root');
 
 const Home = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -168,6 +168,7 @@ const Home = () => {
                     <div className="popup">
                         <div className="popup-content">
                             <h3>{selectedEmployee.name}</h3>
+                            <img src="https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=466&q=80" alt="社員の写真"></img>
                             <p>年齢：{selectedEmployee.age}</p>
                             <p>部署：{selectedEmployee.department}</p>
                             <button onClick={handleClosePopup}>閉じる</button>
