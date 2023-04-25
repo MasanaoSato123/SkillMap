@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 import Modal from 'react-modal';
+import './styles.css';
 
 const employeeData = [
     {
@@ -94,7 +95,6 @@ const Home = () => {
         },
     });
     const [chartSeries, setChartSeries] = useState([]);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const handleSelectEmployee = (employee) => {
         const newChartSeries = [
@@ -118,7 +118,6 @@ const Home = () => {
         setSelectedEmployee(employee);
         setChartSeries(newChartSeries);
         setChartOptions(newChartOptions);
-        setModalIsOpen(true);
     };
 
     const handleClosePopup = () => {
@@ -137,7 +136,6 @@ const Home = () => {
                 tickAmount: 5,
             },
         });
-        setModalIsOpen(false);
     };
 
     const employeesByDepartment = employeeData.reduce((acc, employee) => {
@@ -167,19 +165,17 @@ const Home = () => {
                     </div>
                 ))}
                 {selectedEmployee && (
-                    <Modal isOpen={modalIsOpen} onRequestClose={handleClosePopup}>
-                        <div className="popup">
-                            <div className="popup-content">
-                                <h3>{selectedEmployee.name}</h3>
-                                <p>年齢：{selectedEmployee.age}</p>
-                                <p>部署：{selectedEmployee.department}</p>
-                                <button onClick={handleClosePopup}>閉じる</button>
-                                <div>
-                                    <ApexCharts options={chartOptions} series={chartSeries} type="radar" height={350} />
-                                </div>
+                    <div className="popup">
+                        <div className="popup-content">
+                            <h3>{selectedEmployee.name}</h3>
+                            <p>年齢：{selectedEmployee.age}</p>
+                            <p>部署：{selectedEmployee.department}</p>
+                            <button onClick={handleClosePopup}>閉じる</button>
+                            <div>
+                                <ApexCharts options={chartOptions} series={chartSeries} type="radar" height={350} />
                             </div>
                         </div>
-                    </Modal>
+                    </div>
                 )}
             </div>
 
