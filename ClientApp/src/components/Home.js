@@ -1,26 +1,122 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import ApexCharts from 'react-apexcharts';
 
-export class Home extends Component {
-  static displayName = Home.name;
+const employeeData = [
+    {
+        id: 1,
+        name: '山田太郎',
+        age: 30,
+        department: '営業',
+        skills: { java: 3, 'C#': 5, PHP: 2, クラウド: 1, DB: 5 }
+    },
+    {
+        id: 2,
+        name: '鈴木次郎',
+        age: 25,
+        department: '総務',
+        skills: { java: 1, 'C#': 3, PHP: 4, クラウド: 4, DB: 2 }
+    },
+    {
+        id: 3,
+        name: '佐藤正直',
+        age: 24,
+        department: '技術',
+        skills: { java: 2, 'C#': 4, PHP: 5, クラウド: 5, DB: 2 }
+    },
+    {
+        id: 4,
+        name: '田中花子',
+        age: 28,
+        department: '技術',
+        skills: { java: 5, 'C#': 5, PHP: 1, クラウド: 0, DB: 0 }
+    }
+];
 
-  render() {
+const Home = () => {
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [chartOptions, setChartOptions] = useState({
+        chart: {
+            type: 'radar',
+        },
+        xaxis: {
+            categories: ['Java', 'C#', 'PHP', 'クラウド', 'DB'],
+        },
+        yaxis: {
+            min: 0,
+            max: 5,
+            tickAmount: 5,
+        },
+    });
+    const [chartSeries, setChartSeries] = useState([]);
+
+    const handleSelectEmployee = (employee) => {
+        const newChartSeries = [
+            {
+                name: '5:得意~0:不得意',
+                data: Object.values(employee.skills),
+            },
+        ];
+        const newChartOptions = {
+            ...chartOptions,
+            xaxis: {
+                categories: ['Java', 'C#', 'PHP', 'クラウド', 'DB'],
+            },
+            yaxis: {
+                min: 0,
+                max: 5,
+                tickAmount: 5,
+            },
+        };
+
+        setSelectedEmployee(employee);
+        setChartSeries(newChartSeries);
+        setChartOptions(newChartOptions);
+    };
+
+    const handleClosePopup = () => {
+        setSelectedEmployee(null);
+        setChartSeries([]);
+        setChartOptions({
+            chart: {
+                type: 'radar',
+            },
+            xaxis: {
+                categories: ['Java', 'C#', 'PHP', 'クラウド', 'DB'],
+            },
+            yaxis: {
+                min: 0,
+                max: 5,
+                tickAmount: 5,
+            },
+        });
+    };
+
     return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
+        <div>
+            <h2>社員一覧</h2>
+            <ul>
+                {employeeData.map((employee) => (
+                    <li key={employee.id} onClick={() => handleSelectEmployee(employee)}>
+                        {employee.name}
+                    </li>
+                ))}
+            </ul>
+            {selectedEmployee && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>{selectedEmployee.name}</h3>
+                        <p>年齢：{selectedEmployee.age}</p>
+                        <p>部署：{selectedEmployee.department}</p>
+                        <button onClick={handleClosePopup}>閉じる</button>
+                        <div>
+                            <ApexCharts options={chartOptions} series={chartSeries} type="radar" height={350} />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
-  }
-}
+};
+
+
+export { Home };
