@@ -1,31 +1,34 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { counterSlice } from '../features/counter/slice';
+import { useDispatch } from 'react-redux';
+import { useCounterCount } from '../features/counter/selector';
 
-export class Counter extends Component {
-  static displayName = Counter.name;
+const Counter = () => {
 
-  constructor(props) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
+    const dispatch = useDispatch();
+    const count = useCounterCount();
+    const [currentCount, setCurrentCount] = useState(0);
 
-  incrementCounter() {
-    this.setState({
-      currentCount: this.state.currentCount + 1
-    });
-  }
+    const onClickUp = () => {
+        setCurrentCount(currentCount + 1);
+        dispatch(counterSlice.actions.increment());
+    }
 
-  render() {
+    const onClickDown = () => {
+        setCurrentCount(currentCount - 1);
+        dispatch(counterSlice.actions.changed(count -1));
+    }
+
     return (
-      <div>
-        <h1>Counter</h1>
-
-        <p>This is a simple example of a React component.</p>
-
-        <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
-
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
-      </div>
-    );
-  }
+        <React.Fragment>
+            <h1>Counter</h1>
+            <p>This is a simple example of a React component.</p>
+            <p aria-live="polite">useState: <strong>{currentCount}</strong></p>
+            <p aria-live="polite">Redux: <strong>{count}</strong></p>
+            <button className="btn btn-primary" onClick={onClickUp}>Increment</button>
+            <button className="btn btn-secondary" onClick={onClickDown}>Decrement</button>
+        </React.Fragment>
+    )
 }
+
+export default Counter;
